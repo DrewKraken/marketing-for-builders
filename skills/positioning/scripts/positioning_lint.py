@@ -46,8 +46,11 @@ VAGUE_QUALIFIERS: frozenset[str] = frozenset({
 })
 
 # Phrases that signal benefit/outcome language rather than a feature description.
+# Note the bare "so you "/"so they " (verb to follow) in addition to "so you can":
+# an outcome clause is usually "so you <verb>" ("so you skip the retyping"), which
+# the can/your-only list used to miss — including on this skill's own example.
 BENEFIT_SIGNALS: tuple[str, ...] = (
-    "so you can", "so they can", "so your", "so that", "helps you", "help you",
+    "so you ", "so they ", "so your", "so that", "helps you", "help you",
     "lets you", "let you", "without having to", "without the", "no longer",
     "instead of", "in minutes", "in seconds", "saves", "cuts", "reduces", "avoid",
     "never again",
@@ -62,7 +65,8 @@ AUDIENCE_SIGNALS: tuple[str, ...] = (
     "built for", "designed for", "teams", "developers", "engineers", "founders",
     "builders", "marketers", "designers", "analysts", "managers", "startups",
     "companies", "businesses", "small businesses", "smbs", "agencies", "operators",
-    "bookkeepers", "accountants", "accounting firms", "finance", "anyone who",
+    "bookkeepers", "accountants", "accounting firms", "bookkeeping firms",
+    "accounts payable", "ap teams", "controllers", "cpas", "finance", "anyone who",
     "people who", "those who",
 )
 

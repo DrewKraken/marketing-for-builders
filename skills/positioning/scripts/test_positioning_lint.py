@@ -81,6 +81,25 @@ def test_audience_recognizes_non_dev_roles():
     assert check_audience("For independent bookkeepers and small businesses.") == []
 
 
+def test_audience_recognizes_ap_finance_roles():
+    # AP/finance variants beyond the base bookkeeper/accountant terms.
+    assert check_audience("For accounts payable teams and controllers at growing firms.") == []
+    assert check_audience("Built for CPAs and bookkeeping firms.") == []
+
+
+def test_benefit_language_recognizes_so_you_verb():
+    # Regression: an outcome clause is usually "so you <verb>", not only
+    # "so you can". The bare verb form used to trip no-benefit-language —
+    # including on this skill's own canonical example (see
+    # examples/invoiceparser-pro.md, "...so you skip the retyping").
+    assert check_benefit_language(
+        "InvoiceParser Pro posts each invoice for you, so you skip the retyping."
+    ) == []
+    assert check_benefit_language(
+        "It runs in CI, so they ship without babysitting the pipeline."
+    ) == []
+
+
 # --- sentence length --------------------------------------------------------
 
 def test_long_sentence_flagged():
@@ -119,6 +138,33 @@ def test_lint_clean_copy_has_no_findings():
 def test_lint_aggregates_multiple_findings():
     found = codes(lint("A powerful platform for managing data."))
     assert {"buzzwords", "no-benefit-language", "no-audience"} <= found
+
+
+# --- canonical example self-consistency -------------------------------------
+
+def _example_field(label: str) -> str:
+    """Pull a `> **Label:** ...` line from the InvoiceParser Pro example."""
+    import re
+    from pathlib import Path
+
+    example = (
+        Path(__file__).resolve().parent.parent / "examples" / "invoiceparser-pro.md"
+    ).read_text(encoding="utf-8")
+    m = re.search(rf"^>\s*\*\*{re.escape(label)}:\*\*\s*(.+)$", example, re.MULTILINE)
+    assert m, f"{label} not found in example"
+    # Strip markdown emphasis + surrounding quotes the way rendered copy reads.
+    return m.group(1).replace("*", "").strip().strip('"')
+
+
+def test_example_one_liner_lints_clean():
+    # examples/invoiceparser-pro.md claims "the linter passed both the one-liner
+    # and the value proposition clean." Pin that claim so the example can't drift
+    # from its own tool (the BENEFIT_SIGNALS gap used to make this false).
+    assert lint(_example_field("One-liner"), oneliner=True) == []
+
+
+def test_example_value_proposition_lints_clean():
+    assert lint(_example_field("Value proposition")) == []
 
 
 # --- CLI --------------------------------------------------------------------
