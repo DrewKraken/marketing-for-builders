@@ -1,0 +1,21 @@
+{
+  "name": "marketing-for-builders",
+  "version": "0.0.1",
+  "description": "Marketing skills for people who can ship but can't sell. Turns what a technical founder built into something people understand and want.",
+  "author": {
+    "name": "Drew Swanigan",
+    "email": "drew.swanigan@gmail.com",
+    "url": "https://drewswanigan.dev"
+  },
+  "repository": "https://github.com/DrewKraken/marketing-for-builders",
+  "license": "Apache-2.0",
+  "keywords": [
+    "marketing",
+    "positioning",
+    "gtm",
+    "copywriting",
+    "developer-marketing",
+    "claude-code",
+    "skills"
+  ]
+}

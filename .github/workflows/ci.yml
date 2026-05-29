@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    name: Validate repository structure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate plugin manifest is valid JSON
+        run: jq empty .claude-plugin/plugin.json
+
+      - name: Check required files exist
+        run: |
+          set -e
+          for f in README.md LICENSE CODE_OF_CONDUCT.md CONTRIBUTING.md .claude-plugin/plugin.json; do
+            test -f "$f" || { echo "Missing required file: $f"; exit 1; }
+          done
+          echo "All required files present."
+
+  python:
+    name: Lint & test helper scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dev tools
+        run: pip install ruff pytest
+
+      - name: Ruff (lint)
+        run: ruff check .
+
+      - name: Pytest (deterministic checks only — no LLM calls)
+        run: pytest -q

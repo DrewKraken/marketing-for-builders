@@ -1,0 +1,12 @@
+# Tooling configuration for the repository's helper scripts and tests.
+# This is config-only (not a published package): the skills install as a Claude
+# Code plugin, while the Python here is deterministic helpers + their tests.
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["skills"]
