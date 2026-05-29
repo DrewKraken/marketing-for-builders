@@ -225,3 +225,13 @@ It wins the **fresh** cases too, so it generalizes — it isn't tuned to the dia
 ## Takeaway
 
 `cold-outreach` is the package's proof that the bar is real. A frontier model writes a fine cold email on its own, so the first version of the skill tied it — and the eval said so. The reworked skill wins decisively on held-out and unseen cases, across two model families, by doing the thing a generic draft skips: leading with a real insight, respecting each channel's rules, and (for B2G) trading hype for credibility. We'd rather show the failure and the fix than a fifth tidy sweep.
+
+**The author's read (cold-outreach).** Same caveat as before — non-blind, and I'm the founder, not a copywriter. But this one's worth a specific note: the *first* version of these emails weren't ones I'd have actually sent — and the eval agreed. The reworked ones are: across these cases, the skill's email is the one I'd put my name on, and the no-skill version reads like the cold email I delete. That the first cut failed and the second is one I'd actually send is the whole reason the eval loop matters.
+
+---
+
+# Living results (dogfooding)
+
+I'm not just shipping these skills — I use them on my own work. Most directly on **InvoiceParser Pro**, a production product with real customers that genuinely needs marketing, and on this repo itself (which markets the package using its own skills). The evals above measure output *quality* under blind judges; what they can't measure yet is real-world results — open rates, replies, conversions. So I'll publish those here as they accrue, **including the ones that don't work.**
+
+As of **2026-05-29**: *demonstrated now* = the blind-judge and cross-model results above (quality vs. a no-skill baseline). *Pending / in progress* = live numbers from real sends for InvoiceParser Pro, which I'll add here with dates as data comes in — wins *and* misses, against the reality of AI-flooded inboxes. No promises on numbers I don't have yet; the point of doing it in public is that you can watch the skill earn it, or not.
