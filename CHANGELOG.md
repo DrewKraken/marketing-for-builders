@@ -15,3 +15,5 @@ All notable changes to this project are documented here. The format is based on
 - Opt-in `--oneliner` word-budget check in the linter.
 - `evals/` — evaluation cases and Round-1 results (the `positioning` skill beat the no-skill baseline on all 5 cases; methodology and honest caveats included).
 - Worked before → after example: `skills/positioning/examples/invoiceparser-pro.md`.
+- `landing-copy` skill: `SKILL.md` + `references/` (page structure + swipe file) + `landing_lint.py` (with tests). Turns positioning into landing-page / README copy; prerequisite is positioning.
+- Worked before → after example: `skills/landing-copy/examples/deploykit-readme.md`.

@@ -8,7 +8,7 @@
 
 A [Claude Code](https://docs.claude.com/en/docs/claude-code) skills package that encodes go-to-market craft — positioning, copy, launch — so technical founders can turn what they built into something people actually understand and want.
 
-> **Status:** early, but live. The first skill — [`positioning`](skills/positioning/) — works today; see the [evaluation results](evals/RESULTS.md) for how it performs against no skill. More skills will follow, one at a time.
+> **Status:** early, but live. Two skills work today — [`positioning`](skills/positioning/) and [`landing-copy`](skills/landing-copy/). `positioning` has a published [evaluation](evals/RESULTS.md) (it beat no-skill 5/5); `landing-copy` ships linter-validated, with its baseline evaluation landing next.
 
 ## Why this exists
 
@@ -23,6 +23,7 @@ Each capability is a focused, model-invoked **skill** — a tested playbook, not
 | Skill | Status | What it does |
 |-------|--------|--------------|
 | [`positioning`](skills/positioning/) | available | Turns a raw feature list into a sharp "who it's for + why it matters" value proposition. |
+| [`landing-copy`](skills/landing-copy/) | available | Turns positioning into the page a visitor reads first — a landing page or a project README. |
 
 _Skills are added one at a time, each held to the same bar: a clear playbook, evals that prove it works, and a real before → after example._
 
