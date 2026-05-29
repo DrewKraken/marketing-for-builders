@@ -8,7 +8,7 @@
 
 A [Claude Code](https://docs.claude.com/en/docs/claude-code) skills package that encodes go-to-market craft — positioning, copy, launch — so technical founders can turn what they built into something people actually understand and want.
 
-> **Status:** early, but live. Two skills work today — [`positioning`](skills/positioning/) and [`landing-copy`](skills/landing-copy/), each with a published [evaluation](evals/RESULTS.md) over 5 product shapes. `positioning` beat the no-skill baseline 5/5; `landing-copy` also cleared all 5 (unaided copy tripped a first-impression failure every time), with a smaller per-case margin that's clearest on READMEs — reported honestly, linter limits and all.
+> **Status:** early, but live. Three skills work today — [`positioning`](skills/positioning/), [`landing-copy`](skills/landing-copy/), and [`launch-kit`](skills/launch-kit/), each evaluated two ways: a deterministic **linter** (a guardrail) and a **blind LLM-judge panel** (the quality benchmark). Across 5 product shapes, **all three skills were preferred by the blind judges in 5/5 cases (15/15 votes)** over unaided output — positioning by the widest margin, launch-kit by the narrowest. Reported honestly, limits and all. See [`evals/METHODOLOGY.md`](evals/METHODOLOGY.md) and [`evals/RESULTS.md`](evals/RESULTS.md).
 
 ## Why this exists
 
@@ -24,10 +24,11 @@ Each capability is a focused, model-invoked **skill** — a tested playbook, not
 |-------|--------|--------------|
 | [`positioning`](skills/positioning/) | available | Turns a raw feature list into a sharp "who it's for + why it matters" value proposition. |
 | [`landing-copy`](skills/landing-copy/) | available | Turns positioning into the page a visitor reads first — a landing page or a project README. |
+| [`launch-kit`](skills/launch-kit/) | available | Turns a finished product into the launch post — Show HN, Product Hunt, Reddit, LinkedIn, or X — each shaped to that channel's rules and gate. |
 
 _Skills are added one at a time, each held to the same bar: a clear playbook, evals that prove it works, and a real before → after example._
 
-**Does it work?** See [`evals/RESULTS.md`](evals/RESULTS.md) — in the first evaluation the `positioning` skill beat the no-skill baseline on all 5 test cases, with the methodology and honest caveats shown.
+**Does it work?** See [`evals/METHODOLOGY.md`](evals/METHODOLOGY.md) for the two-instrument framework (deterministic linter + blind judge panel) and [`evals/RESULTS.md`](evals/RESULTS.md) for the numbers — all three skills won 5/5 under blind judges, with the methodology and honest caveats shown.
 
 ## Repository layout
 

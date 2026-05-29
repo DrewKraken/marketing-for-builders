@@ -2,8 +2,13 @@
 
 Do these skills actually produce better output than not using them? This is the evidence, run honestly — including the limits and the cases where the gap is small.
 
-- [`positioning`](#positioning) — clear, consistent lift (beat baseline 5/5).
-- [`landing-copy`](#landing-copy) — real but smaller lift; clearest on READMEs. The linter is a weak discriminator here, and we say so.
+Each skill is evaluated two ways: a **deterministic linter** (a guardrail — specific rules, free in CI) and a **blind LLM-judge panel** (the quality benchmark — 3 judges/case, randomized A/B, judging quality not rule-compliance). See [`METHODOLOGY.md`](METHODOLOGY.md). **All three skills won 5/5 under the blind judges** (15/15 votes each). And to remove the "Claude judged Claude" objection, an **independent GPT/Codex judge** re-judged the same 15 pairs blind and agreed on **14/15** — **29/30 blind verdicts across two model families** favor the skill.
+
+- [`positioning`](#positioning) — the biggest lift: beat baseline 5/5 on the linter, and 5/5 (15/15) under the judge panel with the widest quality gap (16.1 vs 8.0 / 20).
+- [`landing-copy`](#landing-copy) — real lift, clearest on READMEs; the judge panel preferred it 5/5 (15/15) by a *wider* margin than the linter showed.
+- [`launch-kit`](#launch-kit) — judge panel preferred it 5/5 (15/15), but the linter saw almost none of that gap — a case study in matching the metric to the skill.
+
+**The author's read.** Full transparency: I've seen which draft is which, so this isn't a blind score — and I'm a technical founder, not a copywriter (closing that exact gap is the point of this project). Even so, across all 15 pairs I picked the skill-assisted version over the cold, no-skill one every time, and it wasn't close. You don't need to be a marketing expert to see which one you'd actually ship. The blind cross-model panels carry the statistical weight; this is the person the skill is built for confirming the gap is just as obvious from the inside.
 
 ---
 
@@ -65,9 +70,13 @@ In all five, the baseline led with the *mechanism* ("AI-powered platform…"), p
 - Baseline: *"Payments infrastructure developers actually want to build on."*
 - With skill: *"The payments API that lets developers ship billing, subscriptions, and marketplace payouts without the PCI and fraud overhead."* (alternative = building it yourself on a raw processor)
 
+## Judge panel (added 2026-05-29)
+
+A blind 3-judge panel scored the baseline vs. skill **one-liners** (positioning's headline deliverable) for each case — A/B order randomized, judging quality, not told a skill was involved. **The skill swept 5/5 (15/15 votes)**, average **16.1/20 vs 8.0** — the widest quality gap of the three skills. Judges scored baseline one-liners as low as **1/5 on audience** ("names no one," "could be any product") — exactly the failure positioning exists to fix. This independently confirms the linter's 5/5 with a blind quality judge. Limits in [`METHODOLOGY.md`](METHODOLOGY.md): Claude-judged, rubric reflects positioning principles, N=5, judged at the one-liner level (full outputs weren't saved this round).
+
 ## Takeaway
 
-Across five deliberately different product shapes, the skill consistently replaced mechanism-first, feature-piled, broad-audience copy with audience-specific, outcome-led positioning that named the real alternative. Consistent lift — preliminary, but the same pattern every time.
+Across five deliberately different product shapes, the skill consistently replaced mechanism-first, feature-piled, broad-audience copy with audience-specific, outcome-led positioning that named the real alternative. Consistent lift — preliminary, but the same pattern every time, and now confirmed by a blind judge panel as well as the linter.
 
 ---
 
@@ -114,6 +123,56 @@ In both, the skill turned the most-read line into the value proposition, named t
 - **Methodology note.** In a first pass, baseline agents with filesystem access discovered and applied the skill on their own, contaminating the "no-skill" arm. We caught it, discarded those runs, and re-ran all baselines sandboxed from the skill — the kind of leak that silently inflates eval numbers.
 - **N = 5, Claude-judged.** Directional, not a large benchmark.
 
+## Judge panel (added 2026-05-29)
+
+A blind 3-judge panel scored the **full** baseline vs. skill pages — A/B order randomized, judging quality, not told a skill was involved. **The skill swept 5/5 (15/15 votes)**, average **17.7/20 vs 11.5** — a *wider* gap than the linter's 7-findings story implied. The two READMEs were blowouts (PayBridge 20 vs 10.7; DeployKit 18.7 vs 11) on the bare-name-H1 + buried-quickstart failure; on landing pages judges hit the baselines for competing CTAs and feature sprawl (the structure dimension the linter only partly sees). So the judge **confirms and enlarges** the qualitative read above — the linter under-measured the real lift. Limits in [`METHODOLOGY.md`](METHODOLOGY.md).
+
 ## Takeaway
 
-`landing-copy` produces a measurable, consistent improvement on all five shapes, and a clear, demonstrable win on **READMEs**, where unaided copy reliably leads with the product name and a feature dump instead of the value and the audience. On polished marketing landing pages a strong model is already decent, so there the skill's contribution is discipline — one CTA, a named audience, less sprawl — more than night-and-day quality. We'd rather show that honestly than overstate it.
+`landing-copy` produces a measurable, consistent improvement on all five shapes, and a clear, demonstrable win on **READMEs**, where unaided copy reliably leads with the product name and a feature dump instead of the value and the audience. On polished marketing landing pages a strong model is already decent, so there the skill's contribution is discipline — one CTA, a named audience, less sprawl — which the blind judge panel rewarded more clearly than the linter did. We'd rather show that honestly than overstate it.
+
+---
+
+# launch-kit
+
+Does the `launch-kit` skill produce a better launch post than not using it? **Yes — a blind judge panel preferred the skill's post in all 5 cases (15/15 votes).** This skill is also a lesson in *measurement*: our deterministic linter saw almost none of that gap, because rule-compliance is the wrong proxy for launch quality. Both results are below; the judge sweep is the headline.
+
+## Method
+
+Two arms, same as the other skills: **baseline** (no skill, sandboxed from the repo) vs **with skill** (same model + only the skill and blurb). The 5 product blurbs from [`cases.md`](cases.md) are each fixed to **one channel**, mapped across the surfaces to exercise each once: DeployKit → Show HN, PayBridge → Product Hunt, Streaktastic → Reddit, InvoiceParser Pro → LinkedIn, DentalFlow → X (a deliberate weak-fit, to test channel judgment). **Run:** Round 1 — Claude Sonnet, skill v0.1.0, 5 cases.
+
+Scored two ways: (1) the channel-aware [`launch_lint.py`](../skills/launch-kit/scripts/launch_lint.py) (objective, lower = better); (2) a **blind LLM-judge panel** — 3 independent judges per case, A/B order randomized, judging post *quality* (not rule-compliance) and not told a skill was involved, scoring clarity / channel-gate / community-fit / persuasion and picking a winner.
+
+## Result 1 — the judge panel (the real quality test)
+
+| Case | Channel | Skill preferred? | Votes | Skill avg /20 | Baseline avg /20 |
+|------|---------|:----------------:|:-----:|:-------------:|:----------------:|
+| DeployKit | Show HN | yes | 3/3 | 17.3 | 13.7 |
+| PayBridge | Product Hunt | yes | 3/3 | 15.7 | 13.0 |
+| Streaktastic | Reddit | yes | 3/3 | 19.0 | 13.0 |
+| InvoiceParser Pro | LinkedIn | yes | 3/3 | 16.7 | 12.3 |
+| DentalFlow | X | yes | 3/3 | 16.0 | 11.0 |
+| **Overall** | | **5/5** | **15/15** | **16.9** | **12.6** |
+
+The skill won from **both** A and B positions, so it's content, not order bias. The gap concentrated in the **channel gate, community-fit, and persuasion**; **clarity was ~tied** — which is the skill's whole thesis: a strong model already writes *clearly*, so the skill's job is to make the post *land for the channel*. Judges repeatedly noted the skill led with the outcome and a builder's voice, while the baseline defaulted to a feature-list / press-release register. (One judge even rated the DeployKit baseline's "why not Kubernetes" reasoning *more persuasive* — but still picked the skill overall for its title and voice. The baseline isn't bad; the skill is consistently better.)
+
+**Cross-model check:** an independent GPT/Codex judge agreed with the skill on **4 of the 5** launch cases. Its lone dissent was Product Hunt — it preferred the baseline's longer tagline for "broader payoff," but that tagline is **100 characters, over PH's real 60-char cap** (the skill's is 53). So the cross-model judge missed a platform constraint the skill respects. It did surface one fair, actionable critique — the skill's PH maker comment is a single dense paragraph — logged as a Round 1.1 tweak.
+
+## Result 2 — the linter (and why it disagreed)
+
+| Case | Channel | Baseline | With skill |
+|------|---------|:--------:|:----------:|
+| All five | — | **1** | **0** |
+
+The linter found exactly one issue across all five baselines — PayBridge's Product Hunt tagline (a 100-char run-on; cap is 60; the skill cut it to 53). The always-on guardrail checks (upvote-begging, hype) never fired, because the Sonnet baselines were already disciplined. **That near-tie is not evidence the skill barely helps — it's evidence the linter can't see launch quality.** A title that buries the value, a press-release voice, the wrong channel: none are deterministically detectable, and all are exactly what the judges caught. The linter earns its keep as a guardrail (it bites on hype-prone drafts) and on the one gate it *can* measure (tagline length) — not as a quality score.
+
+## Honest limits (read these)
+
+- **Claude-judging-Claude.** Both arms are Sonnet outputs and the judges are Claude — possible house-style self-preference. Mitigated by blinding, position-randomization, and substantive channel-grounded reasons, but a human or cross-model judge would strengthen it.
+- **The rubric's "gate" dimension reflects the same channel principles the skill encodes** — so this fairly tests "which post better fits what the channel rewards," not whether the gate philosophy itself is correct. The more neutral dimensions (clarity, community-fit, persuasion) also favored the skill.
+- **The linter has a known try-link false-negative** (it passed the DeployKit baseline on the substring `pip install` *inside* "No pip install"). A safe-direction miss; noted, not hidden.
+- **N = 5, one channel each, clean blurbs.** Directional, not a benchmark. A planned Round 2 feeds deliberately hype-laden "bad first draft" inputs (where the guardrail checks bite) and ideally adds a cross-model judge.
+
+## Takeaway
+
+On the question that matters — does the skill clearly beat unaided frontier launch work? — the blind panel says yes, 5/5. The more interesting story for an eval-minded reader is the **disagreement between the two metrics**: a deterministic linter rated it a near-tie while a quality judge rated it a sweep. We kept both and let the judge be the headline, because the linter was measuring etiquette and the bar is quality.
