@@ -6,6 +6,16 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Fixed
+- `positioning_lint.py`: `BENEFIT_SIGNALS` now recognizes the bare outcome clause
+  `so you <verb>` / `so they <verb>` (e.g. "so you skip the retyping"), not only
+  `so you can`. This was a false-positive `no-benefit-language` on the skill's own
+  canonical example (`examples/invoiceparser-pro.md`), whose value proposition the
+  example claims "passed the linter clean" but did not. Added a regression test that
+  lints the example's one-liner + value proposition directly so it can't drift again.
+- `positioning_lint.py`: `AUDIENCE_SIGNALS` recognizes more AP/finance roles
+  (`accounts payable`, `ap teams`, `controllers`, `cpas`, `bookkeeping firms`).
+
 ### Added
 - Initial repository scaffold: plugin manifest, base directory structure, license,
   contribution and code-of-conduct guidelines, issue/PR templates, and CI.
