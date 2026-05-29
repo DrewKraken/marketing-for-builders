@@ -2,13 +2,14 @@
 
 Do these skills actually produce better output than not using them? This is the evidence, run honestly — including the limits and the cases where the gap is small.
 
-Each skill is evaluated two ways: a **deterministic linter** (a guardrail — specific rules, free in CI) and a **blind LLM-judge panel** (the quality benchmark — 3 judges/case, randomized A/B, judging quality not rule-compliance). See [`METHODOLOGY.md`](METHODOLOGY.md). **All three skills won 5/5 under the blind judges** (15/15 votes each). And to remove the "Claude judged Claude" objection, an **independent GPT/Codex judge** re-judged the same 15 pairs blind and agreed on **14/15** — **29/30 blind verdicts across two model families** favor the skill.
+Each skill is evaluated two ways: a **deterministic linter** (a guardrail, free in CI) and a **blind LLM-judge panel** (the quality benchmark — 3 judges/case, randomized A/B, judging quality not rule-compliance), with an **independent GPT/Codex judge** corroborating cross-model. See [`METHODOLOGY.md`](METHODOLOGY.md). The first three skills won their blind panels **5/5 on the first pass** (14/15 cross-model). **`cold-outreach` failed its first round 2/5, was reworked, then cleared 5/5** on held-out *and* fresh cases (confirmed 5/5 cross-model) — the eval doing exactly its job.
 
 - [`positioning`](#positioning) — the biggest lift: beat baseline 5/5 on the linter, and 5/5 (15/15) under the judge panel with the widest quality gap (16.1 vs 8.0 / 20).
 - [`landing-copy`](#landing-copy) — real lift, clearest on READMEs; the judge panel preferred it 5/5 (15/15) by a *wider* margin than the linter showed.
 - [`launch-kit`](#launch-kit) — judge panel preferred it 5/5 (15/15), but the linter saw almost none of that gap — a case study in matching the metric to the skill.
+- [`cold-outreach`](#cold-outreach) — the honest one: it *lost* its first round (2/5) against a frontier baseline, was reworked, then won 5/5 on held-out **and** fresh unseen cases (5/5 cross-model). Measures reply *quality*, not live reply rates — those come via the living-results plan.
 
-**The author's read.** Full transparency: I've seen which draft is which, so this isn't a blind score — and I'm a technical founder, not a copywriter (closing that exact gap is the point of this project). Even so, across all 15 pairs I picked the skill-assisted version over the cold, no-skill one every time, and it wasn't close. You don't need to be a marketing expert to see which one you'd actually ship. The blind cross-model panels carry the statistical weight; this is the person the skill is built for confirming the gap is just as obvious from the inside.
+**The author's read.** Full transparency: I've seen which draft is which, so this isn't a blind score — and I'm a technical founder, not a copywriter (closing that exact gap is the point of this project). Even so, across the first three skills' 15 pairs I picked the skill-assisted version over the cold, no-skill one every time, and it wasn't close. You don't need to be a marketing expert to see which one you'd actually ship. The blind cross-model panels carry the statistical weight; this is the person the skill is built for confirming the gap is just as obvious from the inside.
 
 ---
 
@@ -176,3 +177,51 @@ The linter found exactly one issue across all five baselines — PayBridge's Pro
 ## Takeaway
 
 On the question that matters — does the skill clearly beat unaided frontier launch work? — the blind panel says yes, 5/5. The more interesting story for an eval-minded reader is the **disagreement between the two metrics**: a deterministic linter rated it a near-tie while a quality judge rated it a sweep. We kept both and let the judge be the headline, because the linter was measuring etiquette and the bar is quality.
+
+---
+
+# cold-outreach
+
+This is the skill that **failed its first eval — and that's why it's here.** Cold outreach is the hardest thing in the package to do better than a frontier model, because AI made volume free (so generic blasts are everywhere and get filtered) and the base model already writes a competent, personalized email unprompted. Round 1 proved it: the skill *lost*. We diagnosed why, reworked it, and it now clears the bar — confirmed on unseen cases and cross-model. The whole arc is the most honest evidence in this repo that the evals drive the work, not the reverse.
+
+## Method
+
+Two arms (sandboxed **baseline** vs **with skill**), 5 cases = (product → a specific target + a real trigger), spanning B2B and B2G. Both arms write a cold email + a short follow-up sequence. Scored by the channel/`outreach_lint.py` linter (deliverability + spam tells) and a **blind 3-judge panel** (relevance / credibility / ask / reply-likelihood). **Run:** Claude Sonnet.
+
+## Round 1 — the skill lost (and the eval caught it)
+
+| Round 1 | Result |
+|---|---|
+| Linter | baseline 9 findings → skill 0 (baselines left `[Name]` placeholders, ran long, no opt-out) |
+| **Blind judge panel** | **skill 2/5** — won 2, **lost 2** (incl. B2G 0–3), tied 1. Average **14.8 vs 14.7 — dead even.** |
+
+Against a frontier baseline, the skill was no better. Worse, two of our own choices *hurt*: a "graceful opt-out" rule that the model dutifully stamped onto *every* follow-up (a template tell the judges flagged), and a "subject = the trigger" rule that produced flat, low-open subjects. The B2G mode was too generic. We report this in full rather than quietly fixing it, because the failure is the point.
+
+## The rework (structural, not judge-chasing)
+
+We fixed root causes, not per-comment tweaks: the linter now has a `--followup` mode so the opt-out belongs **once** (the linter had *induced* the tic); added an **"one insight" requirement** (a non-obvious observation about the recipient — the ~9%→18% specificity lever); added real subject-line craft (short, lowercase, specific, often a question); and rebuilt **B2G mode** (concrete credibility signals, a "right person?" redirect, slower cadence, lower-pressure ask).
+
+## Round 2 — cleared the bar, on held-out *and* fresh cases
+
+To guard against overfitting to the cases we diagnosed, we re-ran the **3 cases it lost/tied** (held-out regression) **and 2 fresh cases the skill had never seen** (a B2B billing API, a B2G permitting platform):
+
+| Case | Round 1 | Round 2 | skill vs base /20 |
+|------|---------|---------|:--:|
+| DeployKit (held-out) | baseline 2–1 | **skill 3–0** | 16.3 / 12.0 |
+| ClearComm911 — B2G (held-out) | baseline 0–3 | **skill 3–0** | 18.7 / 10.7 |
+| DentalFlow (held-out) | tie | **skill 3–0** | 15.7 / 11.3 |
+| MeterFlow — B2B (**fresh**) | — | **skill 3–0** | 16.3 / 13.3 |
+| PermitPilot — B2G (**fresh**) | — | **skill 2–1** | 16.0 / 15.7 |
+| **Total** | skill 2/5 | **skill 5/5, 14/15 votes** | |
+
+It wins the **fresh** cases too, so it generalizes — it isn't tuned to the diagnosis set. The B2G fix is the standout: 0–3 on the 911 case → wins B2G on both a held-out (3–0) and a fresh (2–1) scenario. **Cross-model (GPT/Codex), same 5 pairs, blind: skill 5/5** — and it preferred the skill *decisively* on the fresh B2G case that the Claude panel split 2–1.
+
+## Honest limits (read these)
+
+- **No live reply rates.** This measures the *leading indicators* of a reply (a real trigger/insight, relevance, brevity, not getting filtered) and spam-avoidance — **not** real-world response rates, which we can't measure without sending. Those will be tracked openly over time via the living-results plan; this is the skill where that matters most.
+- **The fresh B2G case was 2–1, not a sweep.** One judge preferred the baseline's concrete operational bullets (cooperative-purchasing vehicles, a deployment timeline) over the skill's insight-led email. A real, minor gap → a v0.1.1 polish (fold concrete procurement/operational proof points into B2G output). Cross-model preferred the skill here, but the note stands.
+- **LLM judges (Claude + GPT), small N, Claude-generated arms.** Same standing caveats as the other skills; a human spot-check is the cheap further leg.
+
+## Takeaway
+
+`cold-outreach` is the package's proof that the bar is real. A frontier model writes a fine cold email on its own, so the first version of the skill tied it — and the eval said so. The reworked skill wins decisively on held-out and unseen cases, across two model families, by doing the thing a generic draft skips: leading with a real insight, respecting each channel's rules, and (for B2G) trading hype for credibility. We'd rather show the failure and the fix than a fifth tidy sweep.

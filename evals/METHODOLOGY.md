@@ -47,7 +47,10 @@ Think unit-tests-and-lint vs. an integration benchmark. A serious eval stack wan
 | [positioning](RESULTS.md#positioning) | 21 → 0 | 5/5 (15/15) | 16.1 vs 8.0 |
 | [landing-copy](RESULTS.md#landing-copy) | 7 → 0 | 5/5 (15/15) | 17.7 vs 11.5 |
 | [launch-kit](RESULTS.md#launch-kit) | 1 → 0 | 5/5 (15/15) | 16.9 vs 12.6 |
+| [cold-outreach](RESULTS.md#cold-outreach) | 9 → 0 | **5/5 after rework** (R1 was 2/5) | 16.6 vs 12.6 |
 
 Both instruments **rank the three skills the same way** (positioning > landing-copy > launch-kit by gap size) even though they disagree on launch-kit's absolute verdict — independent corroboration that the ordering is real, and a concrete illustration of why the linter alone would have undersold launch-kit.
 
-**Cross-model check:** an independent GPT/Codex judge, blind, re-judged all 15 pairs and agreed with the Claude panel on **14** of them (the one exception: it preferred the baseline's longer Product Hunt tagline, which actually violates PH's 60-char limit — a judge missing a platform constraint, not the skill losing on merit). **29/30 blind verdicts across two model families favor the skill.**
+**Cross-model check:** an independent GPT/Codex judge, blind, re-judged the first three skills' 15 pairs and agreed with the Claude panel on **14** of them (the one exception: it preferred the baseline's longer Product Hunt tagline, which actually violates PH's 60-char limit — a judge missing a platform constraint, not the skill losing on merit). For **cold-outreach**, the same cross-model judge scored the reworked skill **5/5** on the Round 2 pairs (and preferred it decisively on the fresh B2G case the Claude panel split 2–1). Across everything, the conclusion does not depend on Claude judging Claude.
+
+**`cold-outreach` is the framework's load-bearing test:** it *failed* its first round (skill 2/5, dead even with the baseline), which is the clearest possible proof the panel isn't a rubber stamp. We diagnosed the structural defects, reworked the skill, and re-proved it on the held-out failures **and** fresh unseen cases (5/5, cross-model confirmed). See [RESULTS.md#cold-outreach](RESULTS.md#cold-outreach) for the full arc.
