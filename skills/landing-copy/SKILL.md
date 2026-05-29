@@ -1,7 +1,7 @@
 ---
 name: landing-copy
 description: This skill should be used when the user wants to "write a landing page", "write my README", "fix my homepage copy", "write a hero section", "my landing page isn't converting", "what should my README say", or turn positioning into the actual page a visitor reads first. Use it whenever someone needs first-impression copy for a product — a landing page or a project README — even if they don't say "landing page".
-version: 0.1.0
+version: 0.1.1
 license: Apache-2.0
 ---
 

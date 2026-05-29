@@ -17,3 +17,5 @@ All notable changes to this project are documented here. The format is based on
 - Worked before → after example: `skills/positioning/examples/invoiceparser-pro.md`.
 - `landing-copy` skill: `SKILL.md` + `references/` (page structure + swipe file) + `landing_lint.py` (with tests). Turns positioning into landing-page / README copy; prerequisite is positioning.
 - Worked before → after example: `skills/landing-copy/examples/deploykit-readme.md`.
+- `landing_lint.py`: added a `competing-cta` check (flags two or more distinct CTA intents side by side; platform variants like App Store + Google Play are treated as one intent).
+- `landing-copy` evaluation: Round 1 over 5 product shapes — the skill cleared the linter on all 5 cases while unaided copy tripped a first-impression failure on every one (modest per-case margin; clearest on READMEs). Methodology and honest caveats in `evals/RESULTS.md`.

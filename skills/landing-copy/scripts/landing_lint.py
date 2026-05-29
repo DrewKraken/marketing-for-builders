@@ -51,6 +51,32 @@ CTA_SIGNALS: tuple[str, ...] = (
     "get the", "join ", "pip install", "npm install", "brew install",
 )
 
+# CTA intent buckets. The skill mandates ONE primary call-to-action; two
+# different intents fighting for the same click (side by side) is the
+# "competing CTA" antipattern. Platform variants of the same action
+# (App Store + Google Play) share a bucket, so they are NOT flagged.
+CTA_BUCKETS: dict[str, tuple[str, ...]] = {
+    "install": (
+        "install", "download", "app store", "google play", "get it on",
+        "brew install", "npm install", "pip install",
+    ),
+    "signup": (
+        "get started", "sign up", "start free", "start free trial", "try it",
+        "try free", "create account", "join ",
+    ),
+    "demo": (
+        "book a demo", "request a demo", "get a demo", "request access",
+        "contact sales", "talk to sales", "talk to us",
+    ),
+    "docs": ("read the docs", "view docs", "documentation", "learn more", "read more"),
+    "pricing": (
+        "see plans", "view plans", "see pricing", "view pricing", "see all plans",
+        "compare plans",
+    ),
+}
+
+BRACKET_LABEL = re.compile(r"\[([^\]]+)\]")
+
 # Category nouns that, on their own, do not communicate value.
 CATEGORY_NOUNS: tuple[str, ...] = (
     "platform", "tool", "library", "solution", "framework", "api", "app",
@@ -140,6 +166,33 @@ def check_scannability(text: str) -> list[Finding]:
     return []
 
 
+def _cta_buckets(label: str) -> set[str]:
+    low = label.lower()
+    return {name for name, sigs in CTA_BUCKETS.items() if any(s in low for s in sigs)}
+
+
+def check_competing_cta(text: str) -> list[Finding]:
+    """Flag two or more distinct CTA intents placed side by side on one line.
+
+    Repeating the SAME action (or App Store + Google Play, one intent) is fine;
+    "Start free trial" next to "Book a demo" forces the visitor to choose.
+    """
+    for line in text.splitlines():
+        labels = BRACKET_LABEL.findall(line)
+        if len(labels) < 2:
+            continue
+        buckets: set[str] = set()
+        for label in labels:
+            buckets |= _cta_buckets(label)
+        if len(buckets) >= 2:
+            return [Finding(
+                "competing-cta", "warn",
+                "Competing calls-to-action share one spot "
+                f"({', '.join(sorted(buckets))}). Lead with ONE primary action "
+                "and demote the rest to a secondary link.")]
+    return []
+
+
 def check_buzzwords(text: str) -> list[Finding]:
     found = sorted({w for w in _words(text) if w in BUZZWORDS})
     if not found:
@@ -155,6 +208,7 @@ CHECKS = (
     check_cta,
     check_audience,
     check_scannability,
+    check_competing_cta,
     check_buzzwords,
 )
 

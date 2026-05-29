@@ -7,6 +7,7 @@ import json
 from landing_lint import (
     check_audience,
     check_buzzwords,
+    check_competing_cta,
     check_cta,
     check_headline,
     check_scannability,
@@ -71,6 +72,33 @@ def test_scannability_ok_with_headings():
 
 def test_scannability_short_text_ok():
     assert check_scannability("Short and sweet.") == []
+
+
+# --- competing CTA ----------------------------------------------------------
+
+def test_competing_cta_flagged():
+    # Two distinct intents (signup vs demo) side by side.
+    assert "competing-cta" in codes(check_competing_cta("[Start free trial] [Book a demo]"))
+
+
+def test_competing_cta_platform_variants_ok():
+    # App Store + Google Play are one intent (install), not competing.
+    assert check_competing_cta("[Download on the App Store] [Get it on Google Play]") == []
+
+
+def test_competing_cta_repeated_same_action_ok():
+    assert check_competing_cta("[Start free] some copy\nmore copy [Start free]") == []
+
+
+def test_competing_cta_prose_links_ok():
+    # Two non-CTA links on a line should not trip the check.
+    assert check_competing_cta("See the [releases page] and the [changelog] for details.") == []
+
+
+def test_competing_cta_primary_plus_docs_separate_lines_ok():
+    # A primary CTA and a docs link on different lines is a valid primary/secondary pair.
+    text = "[Get started]\n\nOr [read the docs] first."
+    assert check_competing_cta(text) == []
 
 
 # --- buzzwords --------------------------------------------------------------
